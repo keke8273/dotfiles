@@ -46,3 +46,16 @@ set splitbelow          " horizontal splits below
 set splitright          " vertical splits to the right
 set hidden              " allow switching buffers without saving
 
+" -----------------------------
+" Plugins
+" -----------------------------
+call plug#begin('~/.vim/plugged')
+
+Plug 'tpope/vim-fugitive'       " git plugin
+Plug 'vim-airline/vim-airline'  " status line
+Plug 'preservim/nerdtree'       " file explorer
+"Plug 'airblade/vim-gitgutter'   " shows git changes in the sign column
+
+
+call plug#end()
+
