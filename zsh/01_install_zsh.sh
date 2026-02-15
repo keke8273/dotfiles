@@ -35,6 +35,17 @@ else
     echo "Oh My Zsh already installed."
 fi
 
+# Define Powerlevel10k theme path
+P10K_PATH="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k"
+
+# Install Powerlevel10k if not installed
+if [ ! -d "$P10K_PATH" ]; then
+    echo "Installing Powerlevel10k..."
+    git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "$P10K_PATH"
+else
+    echo "Powerlevel10k already installed."
+fi
+
 echo "Zsh installation and setup complete!"
 echo "Please log out and log back in (or restart terminal) to start using Zsh."
 
