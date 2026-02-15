@@ -1,2 +1,2 @@
 # zshrc
-Person zsh configuration
+Personal zsh configuration.
