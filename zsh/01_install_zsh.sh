@@ -24,8 +24,14 @@ if ! grep -q "$(which zsh)" /etc/shells; then
     echo "$(which zsh)" | sudo tee -a /etc/shells
 fi
 
-echo "Changing default shell to zsh for user $USER"
-chsh -s "$(which zsh)" "$USER"
+# Check if zsh is already the default shell
+CURRENT_SHELL=$(getent passwd "$USER" | cut -d: -f7)
+if [ "$CURRENT_SHELL" = "$(which zsh)" ]; then
+    echo "Zsh is already the default shell for user $USER"
+else
+    echo "Changing default shell to zsh for user $USER"
+    chsh -s "$(which zsh)" "$USER"
+fi
 
 # Install Oh My Zsh (non-interactive)
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
