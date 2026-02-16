@@ -74,6 +74,10 @@ else
     echo "zsh-syntax-highlighting already installed."
 fi
 
+# Install autojump 
+echo "Installing autojump"
+sudo apt install autojump
+
 # -------------------------------
 # Create symlinks for zshrc and p10k.zsh
 # -------------------------------
@@ -98,4 +102,3 @@ fi
 
 echo "Zsh installation and setup complete!"
 echo "Please log out and log back in (or restart terminal) to start using Zsh."
-
