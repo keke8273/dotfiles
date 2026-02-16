@@ -34,5 +34,17 @@ else
     echo "vim-plug is already installed."
 fi
 
+# -------------------------------
+# Create symlink for .vimrc
+# -------------------------------
+VIMRC_SOURCE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/vimrc"
+VIMRC_LINK="$HOME/.vimrc"
+if [ -L "$VIMRC_LINK" ] && [ "$(readlink "$VIMRC_LINK")" = "$VIMRC_SOURCE" ]; then
+    echo ".vimrc symlink already points to the correct location."
+else
+    ln -sf "$VIMRC_SOURCE" "$VIMRC_LINK"
+    echo "Created symlink: $VIMRC_LINK -> $VIMRC_SOURCE"
+fi
+
 echo "Done!"
 
