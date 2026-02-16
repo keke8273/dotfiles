@@ -46,6 +46,17 @@ else
     echo "Powerlevel10k already installed."
 fi
 
+# Define zsh-autosuggestions plugin path
+AUTOSUGGESTIONS_PATH="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions"
+
+# Install zsh-autosuggestions if not installed
+if [ ! -d "$AUTOSUGGESTIONS_PATH" ]; then
+    echo "Installing zsh-autosuggestions..."
+    git clone https://github.com/zsh-users/zsh-autosuggestions "$AUTOSUGGESTIONS_PATH"
+else
+    echo "zsh-autosuggestions already installed."
+fi
+
 # -------------------------------
 # Create symlinks for zshrc and p10k.zsh
 # -------------------------------
