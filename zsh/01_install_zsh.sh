@@ -63,6 +63,17 @@ else
     echo "zsh-autosuggestions already installed."
 fi
 
+# Define zsh-syntax-highlighting plugin path
+SYNTAX_HIGHLIGHTING_PATH="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting"
+
+# Install zsh-syntax-highlighting if not installed
+if [ ! -d "$SYNTAX_HIGHLIGHTING_PATH" ]; then
+    echo "Installing zsh-syntax-highlighting..."
+    git clone https://github.com/zsh-users/zsh-syntax-highlighting "$SYNTAX_HIGHLIGHTING_PATH"
+else
+    echo "zsh-syntax-highlighting already installed."
+fi
+
 # -------------------------------
 # Create symlinks for zshrc and p10k.zsh
 # -------------------------------
