@@ -13,6 +13,11 @@ This is a personal dotfiles repository containing shell and editor configuration
   - `p10k.zsh` - Powerlevel10k theme configuration
   - `01_install_zsh.sh` - Installation script for Zsh, Oh My Zsh, and Powerlevel10k
 
+- **ai/** - AI assistant configurations and skills
+  - `copilot/` - GitHub Copilot CLI MCP server configuration and installation
+  - `vscode/` - VS Code MCP server configuration
+  - `skills/` - Custom Copilot skills (e.g., git-commit for conventional commits)
+
 ## Installation Scripts
 
 To set up these dotfiles on a new system, run the installation scripts:
@@ -23,13 +28,18 @@ To set up these dotfiles on a new system, run the installation scripts:
 
 # Install and configure Zsh
 ./zsh/01_install_zsh.sh
+
+# Install Copilot MCP configuration (symlinks mcp-config.json to ~/.copilot/)
+./ai/copilot/01_install.sh
 ```
 
-Both scripts:
-- Check if the software is already installed (no-op if present)
+All installation scripts follow these conventions:
+- Named with `01_install_*.sh` prefix for easy discovery
+- Idempotent (safe to run multiple times)
 - Auto-detect the system's package manager (apt, yum, dnf, pacman)
-- Install necessary dependencies and frameworks
-- Exit with error if the package manager is unsupported
+- Exit with error code 1 if package manager is unsupported
+- Use `command -v` for checking if programs exist
+- Echo status messages for visibility
 
 ## Key Configuration Details
 
@@ -49,6 +59,17 @@ Both scripts:
 - Git alias: `gs` = `git status`
 - Prompt configuration auto-sources `~/.p10k.zsh`
 
+## Shell Script Conventions
+
+When creating or modifying installation scripts:
+- Use `#!/bin/bash` shebang
+- Prefer `command -v` over `which` for program existence checks
+- Output to `/dev/null 2>&1` for silent checks
+- Use descriptive echo messages for user feedback
+- Detect package manager with conditional `if command -v apt/dnf/pacman` blocks
+- Exit with code 1 for unsupported package managers
+- Keep scripts idempotent by checking state before making changes
+
 ## Development Notes
 
 When updating configurations:
@@ -56,3 +77,4 @@ When updating configurations:
 - Test package manager detection on target systems
 - Maintain minimal plugin/plugin counts to prevent shell startup slowdown
 - Document any new aliases or environment variables in zshrc comments
+- Use conventional commit format (see `ai/skills/git-commit/SKILL.md`)
