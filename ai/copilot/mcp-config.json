@@ -1,9 +1,19 @@
 {
   "mcpServers": {
     "alphavantage": {
+      "tools": [
+        "*"
+      ],
       "type": "http",
-      "url": "https://mcp.alphavantage.co/mcp?apikey=$API_KEY_ALPHAVANTAGE",
-      "tools": ["*"]
+      "url": "https://mcp.alphavantage.co/mcp?apikey=$API_KEY_ALPHAVANTAGE"
+    },
+    "notion": {
+      "type": "http",
+      "url": "https://mcp.notion.com/mcp",
+      "headers": {},
+      "tools": [
+        "*"
+      ]
     }
   }
 }
