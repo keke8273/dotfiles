@@ -62,5 +62,5 @@ call plug#end()
 " -----------------------------
 " Keyboard shortcuts
 " -----------------------------
-nnoremap <C-n> :NERDTreeToggle<CR>
+nnoremap <C-t> :NERDTreeToggle<CR>
 
