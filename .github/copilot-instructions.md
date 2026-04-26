@@ -1,80 +1,64 @@
 # Dotfiles Repository Guide
 
-This is a personal dotfiles repository containing shell and editor configurations.
+Personal dotfiles repository. Each tool lives in its own subdirectory with a config file and an installation script. Installation scripts deploy configs via **symlinks** back into this repo (not copies), so edits to the repo files take effect immediately.
 
-## Repository Structure
+## Tools Included
 
-- **vim/** - Vim editor configuration
-  - `vimrc` - Main Vim configuration file
-  - `01_install_vim.sh` - Installation script for Vim and vim-plug
-  
-- **zsh/** - Zsh shell configuration
-  - `zshrc` - Main Zsh configuration (uses Oh My Zsh framework)
-  - `p10k.zsh` - Powerlevel10k theme configuration
-  - `01_install_zsh.sh` - Installation script for Zsh, Oh My Zsh, and Powerlevel10k
+| Directory | Config target | Install script |
+|---|---|---|
+| `vim/` | `~/.vimrc` | `vim/01_install_vim.sh` |
+| `zsh/` | `~/.zshrc`, `~/.p10k.zsh` | `zsh/01_install_zsh.sh` |
+| `ghostty/` | `~/.config/ghostty/config` | `ghostty/01_install_ghostty.sh` |
+| `vscode/` | VSCode + VSCodeVim extension | `vscode/01_install_vscode.sh` |
+| `ai/copilot/` | `~/.copilot/mcp-config.json` | `ai/copilot/01_install.sh` |
 
-- **ai/** - AI assistant configurations and skills
-  - `copilot/` - GitHub Copilot CLI MCP server configuration and installation
-  - `vscode/` - VS Code MCP server configuration
-  - `skills/` - Custom Copilot skills (e.g., git-commit for conventional commits)
+## Installation Script Conventions
 
-## Installation Scripts
+All scripts follow this pattern:
 
-To set up these dotfiles on a new system, run the installation scripts:
+- `#!/bin/bash` shebang, named `01_install_*.sh`
+- Idempotent — check state before making changes
+- Use `command -v <tool> >/dev/null 2>&1` (not `which`) to test for programs
+- Resolve script directory with `$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)` for portable relative paths
+- Symlink check pattern: `if [ -L "$LINK" ] && [ "$(readlink "$LINK")" = "$SOURCE" ]` before calling `ln -sf`
+- Package manager detection order: `apt` → `dnf`/`yum` → `pacman`; exit 1 if unsupported
+- Echo status messages at each step
 
-```bash
-# Install and configure Vim
-./vim/01_install_vim.sh
-
-# Install and configure Zsh
-./zsh/01_install_zsh.sh
-
-# Install Copilot MCP configuration (symlinks mcp-config.json to ~/.copilot/)
-./ai/copilot/01_install.sh
-```
-
-All installation scripts follow these conventions:
-- Named with `01_install_*.sh` prefix for easy discovery
-- Idempotent (safe to run multiple times)
-- Auto-detect the system's package manager (apt, yum, dnf, pacman)
-- Exit with error code 1 if package manager is unsupported
-- Use `command -v` for checking if programs exist
-- Echo status messages for visibility
+**Known deviations:**
+- `vscode/01_install_vscode.sh` — Ubuntu/Debian only (no cross-distro detection)
+- `ghostty/01_install_ghostty.sh` — Ubuntu only; removes existing symlink rather than using the idempotent check pattern
+- `zsh/01_install_zsh.sh` — uses `set -e`; the `autojump` install is hardcoded to `apt` without distro detection
 
 ## Key Configuration Details
 
 ### Vim
-
-- Uses `vim-plug` for plugin management (`~/.vim/plugged/`)
-- Installed plugins: vim-fugitive (git), vim-airline (status line), NERDTree (file explorer)
-- 4-space indentation with expandtab
-- System clipboard integration enabled
-- Minimal, focused configuration (commented-out options for extensions)
+- Plugin manager: `vim-plug` (`~/.vim/autoload/plug.vim`, plugins in `~/.vim/plugged/`)
+- Plugins: vim-fugitive (git), vim-airline (status line), NERDTree (file explorer)
+- 4-space indentation with `expandtab`; system clipboard integration enabled
 
 ### Zsh
-
-- Uses **Oh My Zsh** framework (`~/.oh-my-zsh/`)
-- Theme: **Powerlevel10k** (customizable via `p10k configure`)
-- Only the `git` plugin is enabled (to keep startup time fast)
+- Framework: Oh My Zsh (`~/.oh-my-zsh/`)
+- Theme: Powerlevel10k — reconfigure with `p10k configure`
+- Third-party plugins installed to `${ZSH_CUSTOM}/plugins/`: `zsh-autosuggestions`, `zsh-syntax-highlighting`
+- Keep the enabled plugin list minimal to preserve fast shell startup
 - Git alias: `gs` = `git status`
-- Prompt configuration auto-sources `~/.p10k.zsh`
 
-## Shell Script Conventions
+### Ghostty
+- Custom keybindings for split navigation (`ctrl+shift+←/→/↑/↓`) and close (`ctrl+shift+x`)
+- Config syntax: `key = value` pairs; lines starting with `#` are comments
 
-When creating or modifying installation scripts:
-- Use `#!/bin/bash` shebang
-- Prefer `command -v` over `which` for program existence checks
-- Output to `/dev/null 2>&1` for silent checks
-- Use descriptive echo messages for user feedback
-- Detect package manager with conditional `if command -v apt/dnf/pacman` blocks
-- Exit with code 1 for unsupported package managers
-- Keep scripts idempotent by checking state before making changes
+### AI / MCP
+- `ai/copilot/mcp-config.json` — Copilot CLI MCP servers (AlphaVantage via `$API_KEY_ALPHAVANTAGE`, Notion)
+- `ai/vscode/mcp-config.json` — VS Code MCP servers (AlphaVantage)
+- `ai/skills/` — Custom Copilot CLI skills; each skill is a directory with a `SKILL.md`
 
-## Development Notes
+## Commit Convention
 
-When updating configurations:
-- Keep scripts idempotent (safe to run multiple times)
-- Test package manager detection on target systems
-- Maintain minimal plugin/plugin counts to prevent shell startup slowdown
-- Document any new aliases or environment variables in zshrc comments
-- Use conventional commit format (see `ai/skills/git-commit/SKILL.md`)
+Use conventional commits (see `ai/skills/git-commit/SKILL.md`):
+
+```
+type(scope): subject        # under 50 chars, imperative mood, no period
+```
+
+Types: `feat`, `fix`, `docs`, `refactor`, `test`, `perf`, `ci`, `chore`  
+Scopes map to tool directories: `vim`, `zsh`, `ghostty`, `vscode`, `ai`
