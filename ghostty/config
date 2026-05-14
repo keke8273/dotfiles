@@ -55,3 +55,8 @@ keybind = ctrl+shift+up=goto_split:up
 keybind = ctrl+shift+down=goto_split:down
 keybind = ctrl+shift+enter=goto_split:next
 keybind = ctrl+shift+x=close_surface
+
+# Clipboard integration
+clipboard-read = allow
+clipboard-write = allow
+clipboard-paste-protection = false
