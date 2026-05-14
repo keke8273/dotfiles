@@ -15,7 +15,7 @@ Use this skill when you need to:
 
 ## Commit message format
 
-Always follow conventional commit format:
+Always follow conventional commit format:a
 
 ```
 type(scope): subject
@@ -24,6 +24,7 @@ body (optional)
 
 footer (optional)
 ```
+Always include scope in commit message
 
 ## Commit types
 
